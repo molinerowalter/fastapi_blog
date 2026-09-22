@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="mb-4 text-center">Últimas Publicaciones</h1>
+
+    {% for post in posts %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <!-- Título del post -->
+                <h3 class="card-title text-dark">
+                    <a href="#" class="text-decoration-none text-dark">{{ post.title }}</a>
+                </h3>
+                
+                <!-- Subtítulo con Autor y Fecha (campos que faltaban) -->
+                <h6 class="card-subtitle mb-3 text-muted">
+                    Escrito por <span class="fw-bold text-primary">{{ post.author }}</span> 
+                    <small class="text-secondary">- {{ post.date_posted }}</small>
+                </h6>
+                
+                <!-- Contenido del post -->
+                <p class="card-text text-secondary">{{ post.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}
