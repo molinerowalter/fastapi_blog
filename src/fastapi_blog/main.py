@@ -3,6 +3,9 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse 
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException    
+from schemas import PostCreate, PostResponse
+
+
 from pathlib import Path
 
 # 1. Obtenemos la ruta absoluta del archivo actual (main.py)
@@ -39,12 +42,25 @@ def home(request: Request):
     return templates.TemplateResponse(request, "home.html", {"posts": posts, "title": "Home"}) #Retornamos la plantilla HTML home.html y pasamos el objeto request al contexto de la plantilla
 
 
-@app.get("/api/posts")
+@app.get("/api/posts", response_model=list[PostResponse], status_code=status.HTTP_200_OK) #decorator para definir un endpoint, en este caso la ruta "/api/posts" retornara la lista de posts en formato JSON y especificamos el modelo de respuesta y el codigo de estado HTTP
 #Creamos un endpoint para esta url y retornamos la lista de posts
 def get_posts():
     return posts
 
-@app.get("/posts/{post_id}", include_in_schema=False) #Si retornamo HTML no lo mostraremos en la documentacion
+@app.post("/api/posts", response_model=PostResponse, status_code=status.HTTP_201_CREATED) #decorator para definir un endpoint, en este caso la ruta "/api/posts" retornara el post creado en formato JSON y especificamos el modelo de respuesta y el codigo de estado HTTP
+def create_post(post: PostCreate):
+    new_id = max(p["id"] for p in posts) + 1 if posts else 1
+    new_post = {
+        "id": new_id,
+        "title": post.title,
+        "content": post.content,
+        "author": post.author,
+        "date_posted": "April 22, 2025",  # Placeholder date
+    }
+    posts.append(new_post)
+    return new_post
+
+@app.get("/posts/{post_id}", response_model=PostResponse, include_in_schema=False) #Si retornamo HTML no lo mostraremos en la documentacion
 def get_post(request: Request, post_id: int):
     for post in posts:
         if post.get("id") == post_id:
