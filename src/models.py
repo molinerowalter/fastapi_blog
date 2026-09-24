@@ -20,7 +20,7 @@ class User(Base):
         default=None,
     )
 
-    posts: Mapped[list[Post]] = relationship(back_populates="author") #This creates 1:N relationship
+    posts: Mapped[list[Post]] = relationship(back_populates="author", cascade="all, delete-orphan") #This creates 1:N relationship
 
     #Python code
     @property
