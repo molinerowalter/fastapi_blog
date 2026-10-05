@@ -11,6 +11,7 @@ from schemas import PostResponse, UserCreate, UserResponse, UserUpdate
 
 router = APIRouter()
 
+
 @router.post(
     "",
     response_model=UserResponse,

@@ -1,4 +1,4 @@
-from __future__ import annotations #Se usa en versiones anteriores a la 3.14 para utilizar clasess que se definen mas abajo en el archivo. Por ej el User no podria tener list[Posts] porque POSTS no esta definido a esa altura del codigo
+from __future__ import annotations
 
 from datetime import UTC, datetime
 
@@ -6,7 +6,7 @@ from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
-#SIEMPRE DEFINIR DE MANERA CORRECTA LAS RELACIONES EN LA DB DE ENTRADA Y NO ESPERAR A QUE SE PRESENTEN. En este caso la relacion 1:N entre usuarios y posts
+
 
 class User(Base):
     __tablename__ = "users"
@@ -20,9 +20,11 @@ class User(Base):
         default=None,
     )
 
-    posts: Mapped[list[Post]] = relationship(back_populates="author", cascade="all, delete-orphan") #This creates 1:N relationship
+    posts: Mapped[list[Post]] = relationship(
+        back_populates="author",
+        cascade="all, delete-orphan",
+    )
 
-    #Python code
     @property
     def image_path(self) -> str:
         if self.image_file:
@@ -43,7 +45,7 @@ class Post(Base):
     )
     date_posted: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(UTC), #Utiliza el datetime.now al momento de crear el post. Sin el lambda utilizaria el tiempo al levantar el servidor.
+        default=lambda: datetime.now(UTC),
     )
 
     author: Mapped[User] = relationship(back_populates="posts")
