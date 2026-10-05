@@ -13,5 +13,6 @@ class Settings(BaseSettings):
 
     max_upload_size_bytes: int = 5 * 1024 * 1024  # 5 MB //buena practica para limitar el tamaño de los archivos que se pueden subir al servidor, evitando posibles problemas de rendimiento o seguridad.
 
+    posts_per_page: int = 10  # Number of posts to display per page in pagination
 
 settings = Settings()
