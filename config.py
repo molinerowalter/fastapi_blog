@@ -13,6 +13,12 @@ class Settings(BaseSettings):
     algoritm:str = "HS256"
     access_token_expire_minutes: int = 30
 
+    s3_bucket_name: str
+    s3_region: str = "us-east-1"
+    s3_access_key_id: SecretStr | None = None
+    s3_secret_access_key: SecretStr | None = None
+    s3_endpoint_url: str | None = None
+
     max_upload_size_bytes: int = 5 * 1024 * 1024  # 5 MB //buena practica para limitar el tamaño de los archivos que se pueden subir al servidor, evitando posibles problemas de rendimiento o seguridad.
 
     posts_per_page: int = 10  # Number of posts to display per page in pagination
