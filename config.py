@@ -7,6 +7,8 @@ class Settings(BaseSettings):
         env_file_encodig="utf-8"
     )
 
+    database_url: str
+
     secret_key: SecretStr
     algoritm:str = "HS256"
     access_token_expire_minutes: int = 30
