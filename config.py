@@ -15,4 +15,15 @@ class Settings(BaseSettings):
 
     posts_per_page: int = 10  # Number of posts to display per page in pagination
 
+    reset_token_expire_minutes: int = 60  # Expiration time for password reset tokens in minutes
+
+    mail_server: str = "localhost"
+    mail_port: int = 587 #Puerto standard para SMTP (Simple Mail Transfer Protocol) que se utiliza para enviar correos electrónicos. El puerto 587 es el puerto recomendado para enviar correos electrónicos de manera segura utilizando STARTTLS.
+    mail_username: str = ""
+    mail_password: SecretStr = SecretStr("")
+    mail_from: str = "noreply@example.com"
+    mail_use_tls: bool = True
+
+    frontend_url: str = "http://localhost:8000" 
+
 settings = Settings()
