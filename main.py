@@ -35,6 +35,23 @@ templates = Jinja2Templates(directory="templates")
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(posts.router, prefix="/api/posts", tags=["posts"])
 
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+
+    response.headers["X-Frame-Options"] = "SAMEORIGIN" #Setea la política de seguridad para evitar ataques de clickjacking, permitiendo que la página solo se muestre en un iframe del mismo origen.
+
+    response.headers["X-Content-Type-Options"] = "nosniff" #Evita que el navegador interprete el contenido de manera diferente a lo declarado en el encabezado Content-Type, protegiendo contra ataques de tipo MIME sniffing.
+
+    if "Referrer-Policy" not in response.headers:
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin" #Controla la información del encabezado Referer que se envía en las solicitudes, limitando la información compartida con sitios de terceros.
+
+    if request.url.hostname not in ("localhost", "127.0.0.1"):
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=63072000; includeSubDomains"
+        )
+
+    return response
 
 @app.get("/health")
 async def health_check(db: Annotated[AsyncSession, Depends(get_db)]):
